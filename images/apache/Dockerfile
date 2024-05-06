@@ -7,6 +7,8 @@ FROM php:7.0.31-apache-stretch AS base
 
 LABEL maintainer="Marius Millea <mariusmillea@gmail.com>"
 
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
+
 # install packages 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

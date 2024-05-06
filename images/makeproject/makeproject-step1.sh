@@ -25,14 +25,9 @@ rm -r $PROJECT_ROOT/log_*
 mkdir $PROJECT_ROOT/html/stats_archive
 
 
-
 # collect "secrets" (ie passwords, signing keys, etc...) from the project folder
 # and put them in the secrets volume, and add symlinks in their place
 SECRETS=/run/secrets
-
-# code signing and upload keys
-mv $PROJECT_ROOT/keys $SECRETS
-ln -s $SECRETS/keys $PROJECT_ROOT
 
 # ops password
 mkdir -p $SECRETS/html/ops

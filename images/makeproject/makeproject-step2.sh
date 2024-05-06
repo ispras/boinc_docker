@@ -34,7 +34,6 @@ mv $PROJECT_ROOT ${PROJECT_ROOT}.orig
 ln -s $PROJECT_ROOT_DEST $PROJECT_ROOT
 cd $PROJECT_ROOT
 
-
 # wait for MySQL server to start
 echo "Waiting for MySQL server to start..."
 if ! timeout -s KILL 60 mysqladmin ping -h mysql --wait &> /dev/null ; then
@@ -60,6 +59,5 @@ fi
 (cd html/ops && ./db_schemaversion.php > ${PROJECT_ROOT}/db_revision)
 
 bin/xadd
-yes | bin/update_versions
 
 touch $PROJECT_ROOT/.built_${PROJECT}

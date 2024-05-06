@@ -7,11 +7,16 @@ FROM debian:stretch-slim AS base
 
 LABEL maintainer="Marius Millea <mariusmillea@gmail.com>"
 
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
+
 # install packages
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+    && apt-get install -y --allow-downgrades \
         ca-certificates \
         curl \
+        libmariadbclient-dev-compat \
+        libmariadbclient-dev \
+        zlib1g=1:1.2.8.dfsg-5 \
         dh-autoreconf \
         g++ \ 
         git \
@@ -48,25 +53,26 @@ COPY --chown=1000 secrets.env /run/secrets/
 FROM debian:stretch-slim AS b2d
 #==============================
 
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
+
 # do boinc2docker as a separate stage so we don't have to keep re-downloading
 # things whenever the build cache is invalidated
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
+        python \
         python-yaml \
         wget
 
-# the version of vboxwrapper/iso/appver installed is specified in
-# boinc2docker/boinc2docker.yml
 COPY boinc2docker /root/boinc2docker
-RUN /root/boinc2docker/boinc2docker_create_app --download_only
-
 
 
 #====================
 FROM base AS base-b2d
 #====================
+
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
 
 # copy/install extra things needed for the `-b2d` version
 
@@ -80,7 +86,6 @@ COPY --from=b2d --chown=1000 /root/boinc2docker $HOME/boinc2docker
 ENV PATH=$HOME/boinc2docker:$PATH
 
 
-
 #===========================
 FROM base$TAG AS makeproject
 #===========================
@@ -88,8 +93,6 @@ FROM base$TAG AS makeproject
 # everything which depends on build-args is done as ONBUILD in this stage, so
 # the user can customize it
 
-ARG TAG
-ENV TAG=$TAG
 ONBUILD ARG BOINC_USER
 ONBUILD ARG PROJECT_ROOT
 ONBUILD ENV BOINC_USER=$BOINC_USER \
@@ -109,7 +112,7 @@ ONBUILD USER $BOINC_USER
 
 # build server
 ONBUILD RUN makeproject-step1.sh
-ONBUILD RUN test -z "$TAG" || boinc2docker_create_app --projhome $PROJECT_ROOT
+ONBUILD RUN boinc2docker_create_project
 ONBUILD CMD makeproject-step2.sh
 
 ONBUILD WORKDIR $PROJECT_ROOT
