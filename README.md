@@ -23,7 +23,7 @@ New version of boinc2docker is a python module that automates the process of cre
 git clone https://github.com/ispras/boinc_docker.git
 cd boinc_docker
 ```
-2. Change IP address from 127.0.0.1 to hosts' IP address in URL_BASE variable;
+2. Change IP address from 127.0.0.1 to host's IP address in URL_BASE variable;
 3. In order to get suitable version of BOINC server:
 ```bash
 git submodule init
