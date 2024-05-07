@@ -14,6 +14,8 @@ New version of boinc2docker is a python module that automates the process of cre
     * With the help of docker pull command in a user bash script;
     * Docker image is downloaded to the BOINC server and sliced into layers. Each layer is packed into an archive and then passed to the BOINC client along with other user input files;
 
+![boinc_docker](https://github.com/ispras/boinc_docker/assets/62812801/92e469bc-d7d6-4f45-b958-b0c188460ac8)
+
 ### Start
 
 1. To start boinc_docker: 
@@ -21,7 +23,7 @@ New version of boinc2docker is a python module that automates the process of cre
 git clone https://github.com/ispras/boinc_docker.git
 cd boinc_docker
 ```
-2. Change IP-address from 127.0.0.1 to hosts' IPaddress in URL_BASE variable;
+2. Change IP address from 127.0.0.1 to hosts' IP address in URL_BASE variable;
 3. In order to get suitable version of BOINC server:
 ```bash
 git submodule init
@@ -42,9 +44,14 @@ You can now visit the server webpage and connect clients to the server at http:/
 docker exec -it boincdocker_apache_1 /bin/bash
 ```
 
-2. Create bash script with Docker/Docker compose commands: 
+2. Create bash script with Docker/Docker compose commands:
+
+![docker_gpu_script](https://github.com/ispras/boinc_docker/assets/62812801/95798b29-23f8-47cc-951e-da1f1e353749)
 
 3. Run bin/boinc2docker_create_work with necessary parameters: 
+
+![boinc_docker_gpu_workunit](https://github.com/ispras/boinc_docker/assets/62812801/49f5a3d0-b9bf-4312-a1ed-7b197ca080bf)
+
 
 List of the module parameters that are available for user to change are presented below: 
 
@@ -63,5 +70,7 @@ List of the module parameters that are available for user to change are presente
   * ngpus - BOINC plan class parameter (amount of gpus);
   * min_gpu_ram_mb, gpu_ram_used, driver_versions, cuda_versions, use_ati_libs, use_amd_libs, min_ncpus, max_threads, mem_usage_base_mb, mem_usage_per_cpu_mb - [BOINC plan class parameters](https://boinc.berkeley.edu/trac/wiki/AppPlanSpec);
 
+4. Check the results in upload directory on BOINC server:
 
-4. Check the results in upload directory on BOINC server: 
+![boinc_docker_gpu_result](https://github.com/ispras/boinc_docker/assets/62812801/46dcc270-7946-46a1-baf9-3926743393cf)
+
